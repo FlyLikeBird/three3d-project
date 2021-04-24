@@ -28,7 +28,18 @@ function Test(){
      var mesh = new THREE.Mesh(cubeGeometry, material);
      var mesh2 = mesh.clone();
      mesh2.translateX(200);
-     scene.add(mesh, mesh2); //网格模型添加到场景中
+     scene.add(mesh);
+     mesh.castShadow = true;
+    //  创建一个平面几何体作为模型对象的投影面
+    var planeGeometry = new THREE.PlaneGeometry(300,200);
+    var planeMaterial = new THREE.MeshLambertMaterial({
+        color:0x999999
+    });
+    var planeMesh = new THREE.Mesh(planeGeometry, planeMaterial);
+    planeMesh.position.y = -50;
+    planeMesh.rotateX(-Math.PI/2);
+    // scene.add(planeMesh);
+    planeMesh.receiveShadow = true;
     // //  创建球体网格模型
     // var geometry2 = new THREE.SphereGeometry(60, 40, 40);
     // var material2 = new THREE.MeshLambertMaterial({
@@ -75,7 +86,7 @@ function Test(){
       }); //材质对象
       var mesh = new THREE.Mesh(geometry, material); //网格模型对象Mesh
     //  scene.add(mesh);
-     
+
       /**
       * 光源设置
       */
@@ -85,6 +96,15 @@ function Test(){
     //  scene.add(point); 
     // 平行光
     var directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+    directionalLight.position.set(60,100,40);
+    directionalLight.target = mesh;
+    // directionalLight.castShadow = true;
+    directionalLight.shadow.camera.near = 0.5;
+    directionalLight.shadow.camera.far = 300;
+    directionalLight.shadow.camera.left = -50;
+    directionalLight.shadow.camera.right = 50;
+    directionalLight.shadow.camera.top = 200;
+    directionalLight.shadow.camera.bottom = -100;
     scene.add(directionalLight);
      //环境光
     //  var ambient = new THREE.AmbientLight(0x444444);
