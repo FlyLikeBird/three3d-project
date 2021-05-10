@@ -144,11 +144,27 @@ function Test(){
             // object.rotateX(Math.PI/2);
             // object.rotateX(Math.PI/2);
             render();
-            
+            let a = 0;
             setTimeout(()=>{
-                console.log(scene);
-                scene.rotateX(-Math.PI/2);
+                camera.position.set(0,300,300);
+                // camera.rotateX(Math.PI/16);
                 render();
+               //  function motion(){
+               //      a = a + 0.05;
+               //      // console.log(a);
+               //      if ( a >= Math.PI/3) {
+               //          console.log('close');
+               //          console.log(scene.position);
+               //          window.cancelAnimationFrame(timer);
+
+               //      } else {
+               //          console.log(-a);
+               //          scene.rotateX(-0.05);
+               //          render();
+               //          window.requestAnimationFrame(motion);
+               //      }
+               //  }               
+               // let timer = window.requestAnimationFrame(motion);
             },2000)
         })
      //点光源
@@ -179,8 +195,9 @@ function Test(){
      //创建相机对象
     //  var camera = new THREE.OrthographicCamera(-s * k, s * k, s, -s, 1, 1000);
     var camera = new THREE.PerspectiveCamera(60, width/height, 1, 1000); 
-    camera.position.set(0, 300, 600); //设置相机位置
+    camera.position.set(0, 0, 600); //设置相机位置
      camera.lookAt(scene.position); //设置相机方向(指向的场景对象)
+     console.log(camera);
      /**
       * 创建渲染器对象
       */
@@ -194,6 +211,7 @@ function Test(){
      function render(){
          renderer.render(scene, camera);
      }
+     console.log(OrbitControls);
      var controls = new OrbitControls(camera, renderer.domElement);
      controls.addEventListener('change', render);
     },[])

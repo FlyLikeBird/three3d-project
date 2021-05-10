@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import Test from './Test';
-import Chapter6_1 from './chapter6/6-1';
+import Chapter6_1 from './chapter6/6-2';
 import bg from './monitor_bg.png';
 function App() {
   return (
