@@ -122,17 +122,19 @@ function Test(){
         );
         var shapeMeterial = new THREE.MeshBasicMaterial({
             color:0x00ff00,
+            opacity:0.2,
             wireframe:true
         });
         var shapeGeometry2 = new THREE.ExtrudeGeometry(
             shape,
             {
-                amount:10,
+                amount:6,
                 bevelEnabled:false
             }
         );
         var shapeMeterial2 = new THREE.MeshBasicMaterial({
             color:0xff0000,
+            opacity:0.2,
             wireframe:true
         });
         var shapeMesh = new THREE.Mesh(shapeGeometry, shapeMeterial);
@@ -152,50 +154,53 @@ function Test(){
         // group.scale.set(2,2,2);
         var box = new THREE.Box3();
         box.expandByObject(group);
-        console.log(box);
-        console.log(group);
         scene.add(group);
+        var mtlloader = new MTLLoader();
+        mtlloader.setPath('/static');
+        mtlloader.load('/static/ceshi3.mtl',materials=>{
+            console.log(materials);
+                materials.preload();
+                        var loader = new OBJLoader();
+                
+                loader.setMaterials(materials);
 
-        var loader = new OBJLoader();
-        loader.load('/static/ceshi3.obj',object=>{
-            console.log(object);
-            let mesh = object.children[0];
-            mesh.geometry.computeBoundingBox();
-            mesh.geometry.center();
-            // mesh.position.set(0,0,30);
-
-            // mesh.rotateX(Math.PI/2);
-            let box = mesh.geometry.boundingBox;
-
-            var prevX = Math.abs(box.min.x - box.max.x);
-            var prevY = Math.abs(box.min.y - box.max.y);
-            var prevZ = Math.abs(box.min.z - box.max.z);
-            var nowZ = 1/(prevZ/40);
-
-            mesh.rotateX(Math.PI/2);
-            // mesh.position.set(0,0,);
-            console.log(nowZ);
-            // mesh.scale.set(nowZ,nowZ,nowZ);
-            console.log(box.min.z);
-            // mesh.translate(0,0,Math.abs(box.min.z));
-            console.log(mesh.geometry.boundingBox);
-            console.log(mesh.geometry.boundingBox.getCenter());
-            var xRatio = prevX / prevZ;
-            var yRatio = prevY / prevZ;
-            console.log(prevX, prevY, prevZ);
-            // mesh.scale.set(xRatio * nowZ, yRatio*nowZ, nowZ);
-            // mesh.geometry.translate(0,0,10);
-            // mesh.translateZ(10);
-            // mesh.geometry.rotateX(Math.PI/2);
-
-            scene.add(object);
-            
-            render();
-
-            
+                loader.load('/static/ceshi3.obj',object=>{
+                console.log(object);
+                console.log(loader.setMaterials);
+                let mesh = object.children[0];
+                mesh.geometry.computeBoundingBox();
+                mesh.geometry.center();
+                // mesh.position.set(0,0,30);
+    
+                // mesh.rotateX(Math.PI/2);
+                let box = mesh.geometry.boundingBox;
+    
+                var prevX = Math.abs(box.min.x - box.max.x);
+                var prevY = Math.abs(box.min.y - box.max.y);
+                var prevZ = Math.abs(box.min.z - box.max.z);
+                mesh.geometry.rotateX(Math.PI/2);
+                // 基于mesh变化
+                var scale = 1/(Math.abs(box.min.z)/22);
+                var xScale = 1/(prevX/80);
+                var yScale = 1/(prevY/100);
+                mesh.scale.set(xScale, yScale, scale);
+                mesh.translateZ(28);
+                // 基于几何体变换
+    
+                console.log(box.min.z);
+                // mesh.translate(0,0,Math.abs(box.min.z));
+                console.log(mesh.geometry.boundingBox);
+                console.log(mesh.geometry.boundingBox.getCenter());
+                var xRatio = prevX / prevZ;
+                var yRatio = prevY / prevZ;
+                console.log(prevX, prevY, prevZ);
+                scene.add(object);
+                render();
+            })
         })
+        
         var point = new THREE.PointLight(0xffffff);
-     point.position.set(200, 300, 100); 
+     point.position.set(200, -300, 100); 
      scene.add(point);
      /**
       * 相机设置
@@ -207,9 +212,9 @@ function Test(){
      //创建相机对象
     //  var camera = new THREE.OrthographicCamera(-s * k, s * k, s, -s, 1, 1000);
     var camera = new THREE.PerspectiveCamera(60, width/height, 1, 1000); 
-         camera.up.set(0,1,0);
+         camera.up.set(0,0,1);
 
-    camera.position.set(0,0,300); //设置相机位置
+    camera.position.set(0,-300,300); //设置相机位置
      camera.lookAt(scene.position); //设置相机方向(指向的场景对象)
      // console.log(camera);
      /**
